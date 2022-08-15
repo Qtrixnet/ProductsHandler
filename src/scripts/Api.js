@@ -1,5 +1,5 @@
 import {
-  AUTH_URL, cityId, MERGE_CART_URL, password, phone, productSku, promoCode
+  password, phone, productSku, promoCode
 } from './utils/constants';
 import createProductsArr from "./utils/createProductsArr";
 import createChosenProductsArr from "./utils/createChosenProductsArr";
@@ -7,10 +7,36 @@ import createChosenProductsArr from "./utils/createChosenProductsArr";
 class Api {
   constructor() {
     this._button = document.querySelector('.main__cart-button');
+    this._magentoId = null;
+    this._cityId = null;
+    this._token = null;
+  }
+
+  //* Проверка статуса запроса
+  _requestResult(res) {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Что-то пошло не так: Ошибка ${res.status}${res.statusText && `- ${res.statusText}`}`)
+    }
+  }
+
+  _getOldIdFromStorage() {
+    const magentoData = localStorage.getItem('cityMagentoId');
+    if (magentoData) {
+      this._magentoId = JSON.parse(magentoData).data;
+    } else {
+      this._magentoId = '10';
+    }
+  }
+
+  _getNewCityId(cities) {
+    const foundCity = cities.find(city => city?.city_magento_id === this._magentoId);
+    this._cityId = foundCity?.city_id
   }
 
   _auth() {
-    return fetch(AUTH_URL, {
+    return fetch('https://tapi.technodom.kz/sso/api/v1/auth/signin/phone', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -20,18 +46,25 @@ class Api {
         password
       }),
     })
+      .then((res) => this._requestResult(res));
   }
 
-  _mergeCart(token) {
-    return fetch(`${MERGE_CART_URL}?city_id=${cityId}`, {
+  _getCityId() {
+    this._button.textContent = 'Добавляем...';
+    return fetch('https://api.technodom.kz/config-discovery/api/v1/cities')
+      .then((res) => this._requestResult(res));
+  }
+
+  _mergeCart() {
+    return fetch(`https://tapi.technodom.kz/cart/api/v2/carts?city_id=${this._cityId}`, {
       method: 'PATCH',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this._token}`,
         'Content-Type': 'application/json',
         accept: 'application/json',
       },
       body: JSON.stringify({
-        city_id: `${cityId}`,
+        city_id: `${this._cityId}`,
         marketing_units: {
           promo_code: promoCode,
         },
@@ -50,21 +83,20 @@ class Api {
         ],
       }),
     })
+      .then((res) => this._requestResult(res));
   }
 
   sendProductsToCart() {
-    this._button.textContent = 'Добавляем...';
+    this._getOldIdFromStorage();
 
-    this._auth()
-      .then(res => res.json())
-      .then(res => {
-        if(res.access_token) {
-          this._mergeCart(res.access_token)
-            .then(res => res.json())
-            .then(res => console.log(res))
-            .finally(() => this._button.textContent = 'Добавить в корзину')
-        }
-      })
+    this._getCityId()
+      .then(res => this._getNewCityId(res.cities))
+      .then(() => this._auth())
+      .then(res => this._token = res?.access_token)
+      .then(() => this._mergeCart())
+      .then(res => console.log(res))
+      .catch(error => console.log(error))
+      .finally(() => this._button.textContent = 'Добавить в корзину');
   }
 }
 
