@@ -1,0 +1,204 @@
+/* stylelint-disable */
+
+.products * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.products {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  a {
+    text-decoration: none;
+    color: #202020;
+    margin-left: 0;
+
+    &:focus-visible {
+      outline: 1px solid #ff681d;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    justify-content: center;
+  }
+}
+
+.product {
+  position: relative;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 350px;
+  width: 250px;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 15%);
+  }
+
+  .product__stickers-list {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 8px;
+    max-width: 100px;
+    z-index: 1;
+  }
+
+  .product__sticker {
+    list-style: none;
+    margin-bottom: 0;
+    padding: 7px 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 10px;
+    color: #fff;
+    font-family: "Museo Bold";
+
+    &::before {
+      content: "";
+    }
+
+    &--discount {
+      background-color: #b4d252;
+    }
+
+    &--new {
+      background-color: #6fbebc;
+    }
+
+    &--installment {
+      background-color: #f48012;
+    }
+  }
+
+  &__image-container {
+    text-align: center;
+  }
+
+  &__image {
+    width: 165px;
+    height: 165px;
+    object-fit: cover;
+
+    @media screen and (max-width: 400px) {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .product__title {
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+    min-height: 72px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #202020;
+    font-family: "Museo Bold";
+    line-height: 24px;
+
+    @media screen and (max-width: 575px) {
+      -webkit-line-clamp: 1;
+      font-size: 14px;
+    }
+  }
+
+  &__price-container {
+    min-height: 53px;
+  }
+
+  .product__current-price {
+    top: 0;
+    color: #202020;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 24px;
+    line-height: 32px;
+    font-family: "Museo Bold";
+
+    &--orange {
+      color: #ff7112;
+    }
+
+    @media screen and (max-width: 575px) {
+      font-size: 15px;
+    }
+  }
+
+  .product__previous-price {
+    top: 0;
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 5px;
+    margin-bottom: 0;
+    text-decoration: line-through;
+    color: #737171;
+  }
+
+  .product__loan {
+    margin: 8px 0;
+    padding: 4px 6px;
+    background-color: #fdf8e2;
+    border-radius: 4px;
+  }
+
+  .product__loan-caption {
+    font-family: "Museo Bold";
+    font-size: 12px;
+    color: #202020;
+  }
+
+  &__orange-caption {
+    color: #ff7a28;
+  }
+
+  .product__more-info {
+    display: none;
+    width: 100%;
+    padding: 18px 10px;
+    background: #fff;
+    box-shadow: 0px 16px 30px 0px rgba(0, 0, 0, 0.15);
+    border-top: none;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    bottom: -50px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  .product__info-btn {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    padding: 7px 39px;
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 16px;
+    color: #fff;
+    transition: 0.3s;
+    background: #ff681d;
+    border: none;
+    border-radius: 8px;
+    font-family: "Museo Regular";
+  }
+}
+
