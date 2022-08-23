@@ -12,7 +12,7 @@ class ProductsHandler {
     return doc.querySelector('.products');
   }
 
-  removeParams(template) {
+  handleProducts(template) {
     const products = this._parseProductsTemplate(template);
 
     Array.from(products.children).forEach((link) => {
