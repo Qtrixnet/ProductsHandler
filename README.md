@@ -9,13 +9,13 @@
 ## Описание класса
 
 Для использования необходимо создать экземпляр класса `const productsHandler = new ProductsHandler();`.
-Метод`handleProducts` принимает строку, которую возвращает функция `r46` и возвращает готовый элемент, который остается добавить в нужный контейнер.
+Метод`handleProducts` принимает строку, которую возвращает функция `r46` и код блока рекомендаций, а затем возвращает готовый элемент, который остается добавить в нужный контейнер.
 
 ## Использование
 
 ```
 (response) => {
     const productsHandler = new ProductsHandler();
-    document.querySelector('#r46reco').append(productsHandler.handleProducts(response.html));
+    document.querySelector('#r46reco').append(productsHandler.handleProducts(response.html, 'код-блока-рекомендаций'));
 }
 ```

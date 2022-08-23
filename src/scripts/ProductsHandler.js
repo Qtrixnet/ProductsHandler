@@ -1,35 +1,27 @@
 /* eslint-disable */
 
 class ProductsHandler {
-  constructor() {
-    this._code = null;
-  }
-
   _parseProductsTemplate(string) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(string, 'text/html');
-
     return doc.querySelector('.products');
   }
 
-  handleProducts(template) {
+  handleProducts(template, code) {
     const products = this._parseProductsTemplate(template);
-
     Array.from(products.children).forEach((link) => {
       link.href = link.href.split('?')[0];
-      this._addClickHandler(link);
+      this._addClickHandler(link, code);
     });
-
     return products;
   }
 
-  _addClickHandler(link) {
+  _addClickHandler(link, code) {
     link.addEventListener('click', (evt) => {
       evt.preventDefault();
       const target = evt.currentTarget;
       const {sku} = target.dataset;
-
-      window.location.assign(`${target.href}?recommended_by=dynamic&recommended_code=${this._code}#sku=${sku}`);
+      window.location.assign(`${target.href}?recommended_by=dynamic&recommended_code=${code}#sku=${sku}`);
     });
   }
 }
